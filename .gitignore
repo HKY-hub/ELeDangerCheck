@@ -16,9 +16,7 @@ target/
 *~
 
 # ========== Maven ==========
-.mvn/
-mvnw
-mvnw.cmd
+# 注意：mvnw / mvnw.cmd / .mvn/wrapper 必须入库，保证 clone 后可自举构建
 
 # ========== 日志文件 ==========
 logs/
