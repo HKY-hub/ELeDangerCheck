@@ -1,0 +1,48 @@
+package org.example.eledangercheck.rules
+
+import org.example.eledangercheck.entity.TaskParse;
+import org.example.eledangercheck.entity.Hazard;
+
+global java.util.List hazards;
+
+rule "机械伤害风险-起重作业"
+    when
+        $task: TaskParse(workType != null)
+        eval($task.getWorkType().contains("起重") || $task.getWorkType().contains("吊装"))
+    then
+        Hazard hazard = new Hazard();
+        hazard.setHazardName("起重伤害风险");
+        hazard.setCategory("机械伤害");
+        hazard.setHazardLevel("high");
+        hazard.setDescription("起重作业存在重物坠落、挤压伤害风险");
+        hazard.setLocation($task.getLocation());
+        hazards.add(hazard);
+end
+
+rule "机械伤害风险-转动设备"
+    when
+        $task: TaskParse(equipmentType != null)
+        eval($task.getEquipmentType().contains("风机") || $task.getEquipmentType().contains("电机") || $task.getEquipmentType().contains("泵"))
+    then
+        Hazard hazard = new Hazard();
+        hazard.setHazardName("转动设备伤害风险");
+        hazard.setCategory("机械伤害");
+        hazard.setHazardLevel("high");
+        hazard.setDescription("转动设备作业存在绞伤、卷入风险");
+        hazard.setLocation($task.getLocation());
+        hazards.add(hazard);
+end
+
+rule "机械伤害风险-工具使用"
+    when
+        $task: TaskParse(workType != null)
+        eval($task.getWorkType().contains("切割") || $task.getWorkType().contains("打磨") || $task.getWorkType().contains("钻孔"))
+    then
+        Hazard hazard = new Hazard();
+        hazard.setHazardName("工具伤害风险");
+        hazard.setCategory("机械伤害");
+        hazard.setHazardLevel("medium");
+        hazard.setDescription("使用切割、打磨工具存在飞溅、割伤风险");
+        hazard.setLocation($task.getLocation());
+        hazards.add(hazard);
+end

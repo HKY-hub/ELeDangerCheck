@@ -1,0 +1,73 @@
+# ========== 编译输出 ==========
+target/
+*.class
+*.jar
+*.war
+*.ear
+
+# ========== IDE 配置 ==========
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+*.swp
+*.swo
+*~
+
+# ========== Maven ==========
+.mvn/
+mvnw
+mvnw.cmd
+
+# ========== 日志文件 ==========
+logs/
+*.log
+
+# ========== 数据库 ==========
+*.db
+*.sqlite
+
+# ========== 模型文件（体积大，不推送）==========
+src/main/resources/models/*.onnx
+src/main/resources/models/*.pt
+src/main/resources/models/*.pth
+src/main/resources/models/*.weights
+
+# ========== 临时文件 ==========
+*.tmp
+*.temp
+.DS_Store
+Thumbs.db
+
+# ========== 敏感信息（本地私有，绝不入库）==========
+# 本地明文密钥文件：为 application*.yml 的 ${ENV_VAR:} 提供真实取值
+secrets-local.yml
+secrets-local.yaml
+application-local.yml
+application-local.yaml
+application-prod.yml
+application-prod.yaml
+.env
+.env.local
+.env.*.local
+
+# ========== 上传文件目录 ==========
+upload/
+uploads/
+files/
+
+# ========== 测试覆盖率 ==========
+coverage/
+*.lcov
+
+# ========== 本机环境手册（含本机路径与账号，仅本机保留）==========
+AGENT_ENVIRONMENT_RULES.md
+
+# ========== 视觉检测测试图片（本地调试用，代码无引用）==========
+src/main/resources/static/test-images/
+
+# ========== 其他不推送内容 ==========
+vue3/
+.trae/
+eledangercheck_backup_*/

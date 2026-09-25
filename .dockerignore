@@ -1,0 +1,40 @@
+# Git
+.git
+.gitignore
+.github
+
+# Maven构建产物
+target/
+*.jar
+*.war
+*.ear
+
+# IDE
+.idea/
+*.iml
+.vscode/
+*.swp
+*.swo
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# 日志
+logs/
+*.log
+
+# 临时文件
+*.tmp
+*.temp
+*.bak
+
+# 文档
+README.md
+DEPLOY.md
+doc/
+
+# 本地配置
+.env
+.env.local
+application-local.yml

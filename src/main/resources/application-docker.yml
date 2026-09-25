@@ -1,0 +1,90 @@
+# Docker部署专用配置
+# 数据库连接通过环境变量注入，支持docker-compose和k8s部署
+
+server:
+  port: 8081
+  address: 0.0.0.0
+
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://mysql:3306/eledangercheck?useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&characterEncoding=utf8}
+    username: ${SPRING_DATASOURCE_USERNAME:root}
+    password: ${SPRING_DATASOURCE_PASSWORD:}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  sql:
+    init:
+      mode: never
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 20MB
+      max-request-size: 50MB
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.nologging.NoLoggingImpl
+  global-config:
+    db-config:
+      id-type: auto
+  mapper-locations: classpath:mapper/*.xml
+
+jwt:
+  secret: ${JWT_SECRET:}
+  expiration: 86400000
+
+simulation:
+  enabled: true
+  tts-enabled: true
+  esign-enabled: true
+  deepseek-enabled: true
+  fastchat-enabled: true
+
+deepseek:
+  api-key: ${DEEPSEEK_API_KEY:}
+  base-url: ${DEEPSEEK_BASE_URL:https://api.deepseek.com/v1}
+
+fastchat:
+  api-key: ${FASTCHAT_API_KEY:}
+  base-url: ${FASTCHAT_BASE_URL:https://api.fastchat.cn}
+
+elasticsearch:
+  enabled: false
+  host: ${ES_HOST:localhost}
+  port: ${ES_PORT:9200}
+  username: ${ES_USERNAME:}
+  password: ${ES_PASSWORD:}
+  scheme: http
+
+aliyun:
+  tts:
+    access-key-id: ${ALIYUN_ACCESS_KEY_ID:}
+    access-key-secret: ${ALIYUN_ACCESS_KEY_SECRET:}
+    region-id: cn-hangzhou
+    voice-name: Aiyun
+
+esign:
+  app-id: ${ESIGN_APP_ID:}
+  app-secret: ${ESIGN_APP_SECRET:}
+  api-url: https://openapi.esign.cn
+
+tencent:
+  tiia:
+    enabled: ${TENCENT_TIIA_ENABLED:false}
+    secret-id: ${TENCENT_TIIA_SECRET_ID:}
+    secret-key: ${TENCENT_TIIA_SECRET_KEY:}
+    region: ${TENCENT_TIIA_REGION:ap-guangzhou}
+
+app:
+  document:
+    output-path: ${APP_DOCUMENT_PATH:./documents}
+
+logging:
+  level:
+    root: WARN
+    org.springframework: WARN
+    org.springframework.web: INFO
+    org.springframework.security: WARN
+    org.mybatis: ERROR
+    com.baomidou.mybatisplus: ERROR
+    org.example.eledangercheck: INFO

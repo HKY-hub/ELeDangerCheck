@@ -1,0 +1,202 @@
+CREATE TABLE user (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '主键',
+
+    username VARCHAR(50) NOT NULL COMMENT '用户名',
+
+    password VARCHAR(100) NOT NULL COMMENT '密码',
+
+    real_name VARCHAR(50) COMMENT '姓名',
+
+    phone VARCHAR(20),
+
+    role VARCHAR(20) COMMENT '角色',
+
+    department VARCHAR(100) COMMENT '所属部门',
+
+    status TINYINT DEFAULT 1 COMMENT '状态',
+
+    create_time DATETIME,
+
+    update_time DATETIME
+);
+
+
+CREATE TABLE task (
+
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+
+    task_name VARCHAR(200) COMMENT '任务名称',
+
+    task_content TEXT COMMENT '自然语言任务',
+
+    voltage_level VARCHAR(20) COMMENT '电压等级',
+
+    work_type VARCHAR(50) COMMENT '作业类型',
+
+    equipment_type VARCHAR(100) COMMENT '设备类型',
+
+    environment VARCHAR(200) COMMENT '环境条件',
+
+    principal BIGINT COMMENT '负责人',
+
+    task_status VARCHAR(20),
+
+    create_time DATETIME,
+
+    update_time DATETIME
+);
+
+
+CREATE TABLE task_parse (
+
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+
+    task_id BIGINT,
+
+    parse_json JSON,
+
+    llm_model VARCHAR(100),
+
+    confidence DECIMAL(5,2),
+
+    create_time DATETIME
+);
+
+
+CREATE TABLE hazard (
+
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+
+    task_id BIGINT,
+
+    hazard_name VARCHAR(100),
+
+    hazard_level VARCHAR(20),
+
+    description TEXT,
+
+    source_case BIGINT COMMENT '来源事故案例',
+
+    similarity DECIMAL(5,2),
+
+    create_time DATETIME
+);
+
+
+CREATE TABLE safety_measure (
+
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+
+    hazard_id BIGINT,
+
+    measure_content TEXT,
+
+    priority INT,
+
+    rule_source VARCHAR(100),
+
+    create_time DATETIME
+);
+
+
+CREATE TABLE disclosure (
+
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+
+    task_id BIGINT,
+
+    disclosure_no VARCHAR(50),
+
+    pdf_path VARCHAR(255),
+
+    word_path VARCHAR(255),
+
+    emergency_contact VARCHAR(200),
+
+    emergency_route TEXT,
+
+    disclosure_status VARCHAR(20),
+
+    create_time DATETIME
+);
+
+
+CREATE TABLE disclosure_sign (
+
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+
+    disclosure_id BIGINT,
+
+    user_id BIGINT,
+
+    sign_image VARCHAR(255),
+
+    sign_time DATETIME,
+
+    confirm_result VARCHAR(20),
+
+    ip_address VARCHAR(50)
+);
+
+
+CREATE TABLE accident_case (
+
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+
+    title VARCHAR(200),
+
+    accident_type VARCHAR(100),
+
+    voltage_level VARCHAR(20),
+
+    work_type VARCHAR(100),
+
+    hazard TEXT,
+
+    reason TEXT,
+
+    measure TEXT,
+
+    content LONGTEXT,
+
+    embedding_status TINYINT,
+
+    create_time DATETIME
+);
+
+
+CREATE TABLE evaluation (
+
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+
+    disclosure_id BIGINT,
+
+    hazard_score DECIMAL(5,2),
+
+    measure_score DECIMAL(5,2),
+
+    disclosure_score DECIMAL(5,2),
+
+    violation_count INT,
+
+    suggestion TEXT,
+
+    create_time DATETIME
+);
+
+
+CREATE TABLE hazard_dict (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    hazard_code VARCHAR(50),
+    hazard_name VARCHAR(100),
+    hazard_level VARCHAR(20),
+    description TEXT
+);
+
+
+CREATE TABLE measure_dict (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    hazard_code VARCHAR(50),
+    measure_content TEXT,
+    priority INT
+);

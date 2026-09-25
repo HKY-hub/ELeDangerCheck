@@ -1,0 +1,48 @@
+package org.example.eledangercheck.rules
+
+import org.example.eledangercheck.entity.TaskParse;
+import org.example.eledangercheck.entity.Hazard;
+
+global java.util.List hazards;
+
+rule "触电风险-高压作业"
+    when
+        $task: TaskParse(voltageLevel != null)
+        eval($task.getVoltageLevel().contains("10kV") || $task.getVoltageLevel().contains("35kV") || $task.getVoltageLevel().contains("110kV") || $task.getVoltageLevel().contains("220kV"))
+    then
+        Hazard hazard = new Hazard();
+        hazard.setHazardName("高压触电风险");
+        hazard.setCategory("触电风险");
+        hazard.setHazardLevel("high");
+        hazard.setDescription($task.getVoltageLevel() + "高压设备作业，存在触电事故风险");
+        hazard.setLocation($task.getLocation());
+        hazards.add(hazard);
+end
+
+rule "触电风险-低压作业"
+    when
+        $task: TaskParse(voltageLevel != null)
+        eval($task.getVoltageLevel().contains("380V") || $task.getVoltageLevel().contains("220V"))
+    then
+        Hazard hazard = new Hazard();
+        hazard.setHazardName("低压触电风险");
+        hazard.setCategory("触电风险");
+        hazard.setHazardLevel("medium");
+        hazard.setDescription("低压设备作业，存在触电事故风险");
+        hazard.setLocation($task.getLocation());
+        hazards.add(hazard);
+end
+
+rule "触电风险-带电作业"
+    when
+        $task: TaskParse(workType != null)
+        eval($task.getWorkType().contains("带电"))
+    then
+        Hazard hazard = new Hazard();
+        hazard.setHazardName("带电作业触电风险");
+        hazard.setCategory("触电风险");
+        hazard.setHazardLevel("high");
+        hazard.setDescription("带电作业存在直接触电风险，必须严格执行安全规程");
+        hazard.setLocation($task.getLocation());
+        hazards.add(hazard);
+end

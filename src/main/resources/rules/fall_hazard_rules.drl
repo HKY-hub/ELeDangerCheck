@@ -1,0 +1,48 @@
+package org.example.eledangercheck.rules
+
+import org.example.eledangercheck.entity.TaskParse;
+import org.example.eledangercheck.entity.Hazard;
+
+global java.util.List hazards;
+
+rule "高处坠落风险-杆塔作业"
+    when
+        $task: TaskParse(equipmentType != null)
+        eval($task.getEquipmentType().contains("杆塔") || $task.getEquipmentType().contains("铁塔"))
+    then
+        Hazard hazard = new Hazard();
+        hazard.setHazardName("高处坠落风险");
+        hazard.setCategory("高处坠落");
+        hazard.setHazardLevel("high");
+        hazard.setDescription("杆塔作业属于高空作业，存在高处坠落风险");
+        hazard.setLocation($task.getLocation());
+        hazards.add(hazard);
+end
+
+rule "高处坠落风险-屋顶作业"
+    when
+        $task: TaskParse(workType != null)
+        eval($task.getWorkType().contains("屋顶") || $task.getWorkType().contains("屋面"))
+    then
+        Hazard hazard = new Hazard();
+        hazard.setHazardName("高处坠落风险");
+        hazard.setCategory("高处坠落");
+        hazard.setHazardLevel("high");
+        hazard.setDescription("屋顶作业存在高处坠落风险");
+        hazard.setLocation($task.getLocation());
+        hazards.add(hazard);
+end
+
+rule "高处坠落风险-梯子作业"
+    when
+        $task: TaskParse(equipmentType != null)
+        eval($task.getEquipmentType().contains("梯子"))
+    then
+        Hazard hazard = new Hazard();
+        hazard.setHazardName("梯子作业坠落风险");
+        hazard.setCategory("高处坠落");
+        hazard.setHazardLevel("medium");
+        hazard.setDescription("梯子作业存在滑倒、坠落风险");
+        hazard.setLocation($task.getLocation());
+        hazards.add(hazard);
+end

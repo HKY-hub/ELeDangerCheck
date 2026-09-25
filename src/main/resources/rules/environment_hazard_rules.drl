@@ -1,0 +1,62 @@
+package org.example.eledangercheck.rules
+
+import org.example.eledangercheck.entity.TaskParse;
+import org.example.eledangercheck.entity.Hazard;
+
+global java.util.List hazards;
+
+rule "恶劣天气风险-雷雨"
+    when
+        $task: TaskParse(envConditions != null)
+        eval($task.getEnvConditions().contains("雷雨") || $task.getEnvConditions().contains("暴雨"))
+    then
+        Hazard hazard = new Hazard();
+        hazard.setHazardName("雷雨天气风险");
+        hazard.setCategory("环境风险");
+        hazard.setHazardLevel("high");
+        hazard.setDescription("雷雨天气作业存在雷击风险");
+        hazard.setLocation($task.getLocation());
+        hazards.add(hazard);
+end
+
+rule "恶劣天气风险-大风"
+    when
+        $task: TaskParse(envConditions != null)
+        eval($task.getEnvConditions().contains("大风"))
+    then
+        Hazard hazard = new Hazard();
+        hazard.setHazardName("大风天气风险");
+        hazard.setCategory("环境风险");
+        hazard.setHazardLevel("high");
+        hazard.setDescription("大风天气高空作业存在坠落风险");
+        hazard.setLocation($task.getLocation());
+        hazards.add(hazard);
+end
+
+rule "恶劣天气风险-高温"
+    when
+        $task: TaskParse(envConditions != null)
+        eval($task.getEnvConditions().contains("高温"))
+    then
+        Hazard hazard = new Hazard();
+        hazard.setHazardName("高温作业风险");
+        hazard.setCategory("环境风险");
+        hazard.setHazardLevel("medium");
+        hazard.setDescription("高温环境作业存在中暑风险");
+        hazard.setLocation($task.getLocation());
+        hazards.add(hazard);
+end
+
+rule "夜间作业风险"
+    when
+        $task: TaskParse(envConditions != null)
+        eval($task.getEnvConditions().contains("夜间"))
+    then
+        Hazard hazard = new Hazard();
+        hazard.setHazardName("夜间作业风险");
+        hazard.setCategory("环境风险");
+        hazard.setHazardLevel("medium");
+        hazard.setDescription("夜间作业存在照明不足、视线不清风险");
+        hazard.setLocation($task.getLocation());
+        hazards.add(hazard);
+end
